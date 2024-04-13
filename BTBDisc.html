@@ -6,33 +6,33 @@
     <title>BTBDiscord Calculator's</title>
     <style>
         body {
-        font-family: Arial, sans-serif;
-        margin: 0; /* Adjusted to remove top margin */
-        padding: 0;
-        background-color: #f0f0f0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         .welcome-text {
-        text-align: center;
-        padding: 15px;
-        padding-top: 0;
-        font-size: 16px;
-        color: black;
-        cursor: pointer;
-        max-width: calc(100% - 20px);
-        margin-left: 20px;
-        margin-right: 20px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            text-align: center;
+            padding: 15px;
+            padding-top: 0;
+            font-size: 16px;
+            color: black;
+            cursor: pointer;
+            max-width: calc(100% - 20px);
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         }
         .container-wrapper {
             display: flex;
-            gap: 20px; /* Adjust the gap between the containers */
-            justify-content: center; /* Center the containers horizontally */
+            gap: 20px;
+            justify-content: center;
         }
         .container {
             width: 333px;
@@ -47,17 +47,17 @@
             align-items: center;
         }
         .label {
-            width: 175px; /* Adjust label width if needed */
+            width: 170px;
             font-weight: bold;
         }
-        /* Set the same width for both dropdown and input elements */
         .dropdown, .input {
             flex: 1;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-left: 10px;
-            width: 150px; /* Added width property */
+            font-size: 16px;
+            width: 100%;
         }
         .dropdown-label {
             width: 150px;
@@ -66,7 +66,7 @@
             margin-right: 10px;
         }
         .result {
-            display: none; /* Hide initially */
+            display: none;
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ccc;
@@ -87,44 +87,44 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
-            width: 100%; /* Adjusted width */
+            width: 100%;
         }
         button:hover {
             background-color: #0056b3;
         }
         .input.stake, .input.back-odds {
-            background-color: #84c4f1; /* Baby blue background color */
-            color: #000; /* Black text color */
+            background-color: #84c4f1;
+            color: #000;
+            font-size: 16px;
         }
         .input.layOdds {
-            background-color: #f4c7c3; /* Baby pink background color */
-            color: #000; /* Black text color */
+            background-color: #f4c7c3;
+            color: #000;
+            font-size: 16px;
         }
         .input.team1 {
-        background-color: #e0e0e0; /* Light grey for Team 1 input boxes */
+            background-color: #e0e0e0;
+            font-size: 16px;
         }
         .input.team2 {
-            background-color: #b0b0b0; /* Slightly darker grey for Team 2 input boxes */
+            background-color: #b0b0b0;
+            font-size: 16px;
         }
-        .container-wrapper {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-        .container {
-            width: 333px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        /* New CSS style for placeholder */
         .input.stake::placeholder,
         .input.back-odds::placeholder,
         .input.team2::placeholder,
         .input.team1::placeholder,
         .input.layOdds::placeholder {
-            color: #000; /* Black placeholder color */
+            color: #000;
+        }
+        .profit-text {
+            font-weight: bold;
+        }
+        .profit-text.green {
+            color: #319764;
+        }
+        .profit-text.red {
+            color: #c62d2d;
         }
     </style>
 </head>
@@ -233,8 +233,10 @@
 
                 var resultElement = document.getElementById('result');
                 // For Back/Lay Calculator
-                resultElement.style.color = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
-                resultElement.style.fontWeight = 'bold'; // Add this line to make the font bold
+                var textColor = (profit > 0) ? 'black' : (profit < 0) ? 'black' : 'black';
+                var profitColor = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
+                resultElement.style.color = textColor;
+                resultElement.style.fontWeight = 'normal'; // Not bold for non-profit text
                 if (betType === "Cash Bet") {
                     if (profit >= 0) {
                         word1 = "profit";
@@ -245,9 +247,9 @@
                         prefix = "-";
                         aprofit = -profit;
                     }
-                    resultElement.innerHTML = "Lay $" + laystake.toFixed(2) + " to lock-in a " + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + " (" + ((profit / stake) * 100).toFixed(2) + "%)";
+                    resultElement.innerHTML = "Lay $" + laystake.toFixed(2) + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / stake) * 100).toFixed(2) + "%). The liability of this lay bet will be $" + ((laystake)*(layOdds-1)).toFixed(2);
                 } else {
-                    resultElement.innerHTML = "Lay $" + (profit / (1 - commissionRate / 100)).toFixed(2) + " to ensure a conversion of $" + profit.toFixed(2) + " (a " + ((profit / stake) * 100).toFixed(2) + "% conversion)";
+                    resultElement.innerHTML = "Lay $" + (profit / (1 - commissionRate / 100)).toFixed(2) + " to ensure a conversion of <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>$" + profit.toFixed(2) + "</span> (a " + ((profit / stake) * 100).toFixed(2) + "% conversion). The liability of this lay bet will be $" + ((profit / (1 - commissionRate / 100))*(layOdds-1)).toFixed(2);
                 }
             }
 
@@ -286,8 +288,10 @@
 
                 var resultTeamElement = document.getElementById('resultTeam');
                 // For Team 1 vs Team 2 Calculator
-                resultTeamElement.style.color = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
-                resultTeamElement.style.fontWeight = 'bold'; // Add this line to make the font bold
+                var textColor = (profit > 0) ? 'black' : (profit < 0) ? 'black' : 'black';
+                var profitColor = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
+                resultTeamElement.style.color = textColor;
+                resultTeamElement.style.fontWeight = 'normal'; // Not bold for non-profit text
 
                 if (dutchBetType === "Cash Bet") {
                     if (profit >= 0) {
@@ -299,9 +303,9 @@
                         prefix = "-";
                         aprofit = -profit;
                     }
-                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to lock-in a " + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + " (" + ((profit / team1Stake) * 100).toFixed(2) + "%)";
+                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / team1Stake) * 100).toFixed(2) + "%)";
                 } else {
-                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to ensure a conversion of $" + profit.toFixed(2) + " (a " + ((profit / team1Stake) * 100).toFixed(2) + "% conversion)";
+                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to ensure a conversion of <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>$" + profit.toFixed(2) + "</span> (a " + ((profit / team1Stake) * 100).toFixed(2) + "% conversion)";
                 }
             }
 
