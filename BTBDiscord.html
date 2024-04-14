@@ -303,7 +303,7 @@
                         prefix = "-";
                         aprofit = -profit;
                     }
-                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / team1Stake) * 100).toFixed(2) + "%)";
+                    resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / (team1Stake+team2stake)) * 100).toFixed(2) + "%)";
                 } else {
                     resultTeamElement.innerHTML = "Place $" + team2stake.toFixed(2) + " on " + team2Name + " to ensure a conversion of <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>$" + profit.toFixed(2) + "</span> (a " + ((profit / team1Stake) * 100).toFixed(2) + "% conversion)";
                 }
