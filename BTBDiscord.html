@@ -126,6 +126,21 @@
         .profit-text.red {
             color: #c62d2d;
         }
+        .help-reminders {
+            margin-top: 20px;
+            padding-left: 50px;
+            padding-right: 50px;
+            border-radius: 5px;
+        }
+        .help-reminders ul li {
+            word-wrap: break-word; /* Wrap long text */
+            margin-bottom: 5px; /* Add space between list items */
+        }
+
+        .help-reminders a {
+            color: black; /* Change link color */
+            text-decoration: underline; /* Underline link */
+        }
     </style>
 </head>
 <body>
@@ -202,6 +217,16 @@
             <button onclick="calculateTeam()">Calculate</button>
             <div class="result" id="resultTeam"></div>
         </div>
+    </div>
+
+    <!-- Help/Reminders -->
+    <div class="help-reminders">
+        <h3>Help & Reminders:</h3>
+        <ul>
+            <li>When using the Dutching Calculator always place your bet on the other outcome at a DIFFERENT bookie.</li>
+            <li>The Back/Lay Calculator is to be used with the exchange Betfair.</li>
+            <li>Commission rate is 5% for all sports except NRL at Betfair, racing is between 7% - 10% in Australia depending on the state, and 5% in all other countries. For more information visit: <a href="https://www.betfair.com.au/hub/help/commissions-charges/" target="_blank">https://www.betfair.com.au/hub/help/commissions-charges/</a></li>
+        </ul>
     </div>
 
     <script>
