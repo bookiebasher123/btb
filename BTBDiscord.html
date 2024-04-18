@@ -116,6 +116,8 @@
         .input.back-odds::placeholder,
         .input.team2::placeholder,
         .input.team1::placeholder,
+        .input.realOdds::placeholder,
+        .input.input::placeholder,
         .input.layOdds::placeholder {
             color: #000;
         }
@@ -219,6 +221,31 @@
             <button onclick="calculateTeam()">Calculate</button>
             <div class="result" id="resultTeam"></div>
         </div>
+
+        <!-- New Calculator for Expected Value (EV) Calculator -->
+        <div class="container">
+            <div class="section-header">
+                <h3>Expected Value (EV) Calculator</h3>
+            </div>
+            <div class="box">
+                <span class="label">Stake($):</span>
+                <input class="input stake" type="number" id="evStake" placeholder="Enter stake">
+            </div>
+            <div class="box">
+                <span class="label">Back Odds:</span>
+                <input class="input back-odds" type="number" id="evBackOdds" placeholder="Enter back odds">
+            </div>
+            <div class="box">
+                <span class="label">Real Odds:</span>
+                <input class="input" type="number" id="evRealOdds" placeholder="Enter real odds" style="background-color: #d8b8f3;">
+            </div>
+            <div class="box">
+                <span class="label">Assumed Overround (%):</span>
+                <input class="input" type="number" id="evOverround" placeholder="Enter assumed overround" value="0" style="background-color: #d8b8f3;">
+            </div>
+            <button onclick="calculateEV()">Calculate EV</button>
+            <div class="result" id="resultEV"></div>
+        </div>
     </div>
 
     <!-- Help/Reminders -->
@@ -226,15 +253,17 @@
         <h3>Help & Reminders:</h3>
         <ul>
             <li>Before using either calculator for a bonus bet conversion make sure you've fully read through the <strong>#how-to-convert</strong> channel under <strong>education📚</strong> or <strong>#what-is-mugbetting</strong> for if you're going to place a mug bet.</li>
-            <li>The duthcing calculator is used for placing bets on both outcomes on different bookies (on sports which don't have draw as an outcome)</li>
+            <li>The dutching calculator is used for placing bets on both outcomes on different bookies (on sports which don't have draw as an outcome)</li>
             <li>The Back/Lay Calculator is to be used with the exchange Betfair.</li>
             <li>When using the Dutching Calculator always place your bet on the other outcome at a DIFFERENT bookie.</li>
+            <li>The EV calculator can be used to find the amount you will profit off +EV bets such as boosts in the long-term.</li>
+            <li>Assumed overround is the margin your guessing that the bookie has on the market (in a bookie where a promo isn't applied to it). If going off betfair odds assume an overround of 0 unless there is a big discrepancy between back and lay odds</li>
             <li>At Betfair their commission rate is 5% for all sports except NRL(10%), racing is between 7% - 10% in Australia depending on the state, and 5% in all other countries. For more information visit: <a href="https://www.betfair.com.au/hub/help/commissions-charges/" target="_blank">https://www.betfair.com.au/hub/help/commissions-charges/</a></li>
         </ul>
     </div>
 
     <script>
-        // Function to calculate and display result
+        // Function to calculate and display result for Back/Lay Calculator
         function calculate() {
             var betType = document.getElementById('betType').value;
             var stake = parseFloat(document.getElementById('stake').value);
@@ -261,7 +290,6 @@
                 }
 
                 var resultElement = document.getElementById('result');
-                // For Back/Lay Calculator
                 var textColor = (profit > 0) ? 'black' : (profit < 0) ? 'black' : 'black';
                 var profitColor = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
                 resultElement.style.color = textColor;
@@ -285,7 +313,7 @@
             document.getElementById('result').style.display = 'block'; // Show result box
         }
 
-        // Function to calculate and display result for Team 1 vs Team 2 Calculator
+        // Function to calculate and display result for Dutching Calculator
         function calculateTeam() {
             var dutchBetType = document.getElementById('dutchBetType').value;
             var team1Name = document.getElementById('team1Name').value;
@@ -316,7 +344,6 @@
                 }
 
                 var resultTeamElement = document.getElementById('resultTeam');
-                // For Team 1 vs Team 2 Calculator
                 var textColor = (profit > 0) ? 'black' : (profit < 0) ? 'black' : 'black';
                 var profitColor = (profit > 0) ? '#319764' : (profit < 0) ? '#c62d2d' : 'black';
                 resultTeamElement.style.color = textColor;
@@ -339,6 +366,43 @@
             }
 
             document.getElementById('resultTeam').style.display = 'block'; // Show result box
+        }
+
+       // Function to calculate and display result for Expected Value (EV) Calculator
+        function calculateEV() {
+            var stake = parseFloat(document.getElementById('evStake').value);
+            var backOdds = parseFloat(document.getElementById('evBackOdds').value);
+            var realOdds = parseFloat(document.getElementById('evRealOdds').value);
+            var assumedOverround = parseFloat(document.getElementById('evOverround').value);
+            var ev;
+            var percentEV;
+
+            if (
+                document.getElementById('evStake').value === "" ||
+                document.getElementById('evBackOdds').value === "" ||
+                document.getElementById('evRealOdds').value === "" ||
+                document.getElementById('evOverround').value === ""
+            ) {
+                document.getElementById('resultEV').innerHTML = "Finish entering all your bet details before calculating";
+            } else {
+                var profit = stake * (backOdds - 1);
+                var loss = -stake;
+                var winProbability = 1 / (realOdds + (assumedOverround / 100));
+                var lossProbability = 1 - winProbability;
+                ev = profit * winProbability + loss * lossProbability;
+                percentEV = (ev / stake) * 100;
+
+                var resultEVElement = document.getElementById('resultEV');
+                resultEVElement.style.color = ev >= 0 ? 'black' : 'black';
+                resultEVElement.style.fontWeight = 'normal';
+
+                var prefix = ev >= 0 ? '$' : '-$';
+                var evAbs = Math.abs(ev);
+
+                document.getElementById('resultEV').innerHTML = "Expected Value (EV) is equal to <span class='profit-text " + (ev >= 0 ? 'green' : 'red') + "'>" + prefix + evAbs.toFixed(2) + "</span>, which represents a " + percentEV.toFixed(2) + "% return.";
+            }
+
+            document.getElementById('resultEV').style.display = 'block';
         }
     </script>
 </body>
