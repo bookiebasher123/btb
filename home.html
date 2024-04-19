@@ -11,7 +11,6 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('landingnew.png');
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -21,13 +20,10 @@
         }
         .button-container {
             position: absolute;
-            top: 30px; /* Adjusted to move the buttons further from the top */
-            right: 30px; /* Adjusted to move the buttons further from the right */
             z-index: 1000;
         }
         .button-container button {
-            margin-left: 30px; /* Increased space between buttons */
-            padding: 12px 24px; /* Normal button size */
+            padding: 12px 24px;
             background-color: #193F9F;
             color: #fff;
             border: none;
@@ -35,25 +31,52 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            font-family: 'League Spartan', sans-serif; /* Add this line to change the font */
+            font-family: 'League Spartan', sans-serif;
         }
         .button-bottom {
             position: absolute;
-            bottom: 169px; /* Adjusted to move the button further from the bottom */
-            right: 145px; /* Adjusted to move the button closer to the left edge */
             z-index: 1000;
             transform: translate(-50%, 50%); /* Center the button vertically */
         }
         .button-bottom button {
-            padding: 18px 40px; /* Double the button size */
+            padding: 18px 40px;
             background-color: #193F9F;
             color: #fff;
             border: none;
             font-weight: bold;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 27px; /* Double the font size */
-            font-family: 'League Spartan', sans-serif; /* Add this line to change the font */
+            font-size: 27px;
+            font-family: 'League Spartan', sans-serif;
+        }
+
+        /* Media Query for Mobile */
+        @media (max-width: 767px) {
+            body {
+                background-image: url('LandingMobile.png');
+            }
+            .button-container {
+                top: 30px;
+                right: 30px;
+            }
+            .button-bottom {
+                display: none; /* Hide the Join Now button on mobile */
+            }
+        }
+
+        /* Media Query for Desktop */
+        @media (min-width: 768px) {
+            body {
+                background-image: url('landingnew.png');
+            }
+            .button-container {
+                top: 30px; /* Adjusted to move the buttons further from the top */
+                right: 30px; /* Adjusted to move the buttons further from the right */
+            }
+            .button-bottom {
+                bottom: 169px; /* Adjusted to move the button further from the bottom */
+                right: 145px; /* Adjusted to move the button closer to the left edge */
+            }
         }
     </style>
 </head>
