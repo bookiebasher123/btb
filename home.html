@@ -27,7 +27,7 @@
         }
         .button-container button {
             margin-left: 30px; /* Increased space between buttons */
-            padding: 12px 24px; /* 15% increase in button size */
+            padding: 12px 24px; /* Normal button size */
             background-color: #193F9F;
             color: #fff;
             border: none;
@@ -37,12 +37,33 @@
             font-size: 16px;
             font-family: 'League Spartan', sans-serif; /* Add this line to change the font */
         }
+        .button-bottom {
+            position: absolute;
+            bottom: 169px; /* Adjusted to move the button further from the bottom */
+            right: 145px; /* Adjusted to move the button closer to the left edge */
+            z-index: 1000;
+            transform: translate(-50%, 50%); /* Center the button vertically */
+        }
+        .button-bottom button {
+            padding: 18px 40px; /* Double the button size */
+            background-color: #193F9F;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 27px; /* Double the font size */
+            font-family: 'League Spartan', sans-serif; /* Add this line to change the font */
+        }
     </style>
 </head>
 <body>
     <div class="button-container">
         <button onclick="location.href='https://bookiebasher123.github.io/btb/calculators.html';">Calculators</button>
         <button onclick="location.href='https://mee6.xyz/en/m/1225323622776963072';">Join Us</button>
+    </div>
+    <div class="button-bottom"> 
+        <button onclick="location.href='https://mee6.xyz/en/m/1225323622776963072';">Join Now!</button>
     </div>
     <main>
         <!-- Your website content goes here -->
