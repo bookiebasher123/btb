@@ -142,7 +142,7 @@
         <button onclick="location.href='https://mee6.xyz/en/m/1225323622776963072';">Join Now!</button>
     </div>
     <!-- Dropdown for Mobile -->
-    <div class="dropdown">
+    <div class="dropdown" id="dropdown">
         <button class="dropdown-toggle" onclick="toggleDropdown()">Menu</button>
         <div class="dropdown-content" id="dropdownContent">
             <button onclick="location.href='https://www.instagram.com/btbdiscord/';" style="margin-bottom: 10px;">Instagram</button>
@@ -158,6 +158,15 @@
             var dropdownContent = document.getElementById("dropdownContent");
             dropdownContent.style.display === "block" ? dropdownContent.style.display = "none" : dropdownContent.style.display = "block";
         }
+
+        // Close dropdown when clicking outside of it
+        document.addEventListener('click', function(event) {
+            var dropdown = document.getElementById('dropdown');
+            var dropdownContent = document.getElementById('dropdownContent');
+            if (!dropdown.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
