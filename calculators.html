@@ -387,7 +387,7 @@
             } else {
                 var profit = stake * (backOdds - 1);
                 var loss = -stake;
-                var winProbability = 1 / (realOdds + (assumedOverround / 100));
+                var winProbability = 1 / (realOdds * (1 + assumedOverround / 100));
                 var lossProbability = 1 - winProbability;
                 ev = profit * winProbability + loss * lossProbability;
                 percentEV = (ev / stake) * 100;
