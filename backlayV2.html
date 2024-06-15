@@ -26,18 +26,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh;
-            justify-content: center;
+            min-height: 100vh;
         }
         .calculator-title {
             text-align: center;
             font-size: 48px; /* Increased the size */
+            margin-top: 20px;
             margin-bottom: 40px;
         }
         .container-wrapper {
             display: flex;
             gap: 50px;
             align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .container, .how-to-use {
             width: 333px;
@@ -140,6 +142,9 @@
         @media (min-width: 769px) {
             .container-wrapper .container, .container-wrapper .how-to-use {
                 height: 100%; /* Ensure both boxes are the same height on desktop */
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
         }
     </style>
@@ -187,7 +192,6 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Nulla facilisi. Praesent at dui ut eros suscipit dictum. Integer sit amet venenatis est.</p>
         </div>
     </div>
-
     <script>
         // Function to calculate and display result for Back/Lay Calculator
         function calculate() {
@@ -226,7 +230,7 @@
                     } else {
                         word1 = "loss";
                         prefix = "-";
-                        aprofit = -profit;
+                   x     aprofit = -profit;
                     }
                     resultElement.innerHTML = "Lay $" + laystake.toFixed(2) + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / stake) * 100).toFixed(2) + "%). The liability of this lay bet will be $" + ((laystake) * (layOdds - 1)).toFixed(2);
                 } else {
