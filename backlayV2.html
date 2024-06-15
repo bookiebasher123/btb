@@ -28,6 +28,21 @@
             align-items: center;
             min-height: 100vh;
         }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2e2e2e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: none;
+        }
         .calculator-title {
             text-align: center;
             font-size: 48px; /* Increased the size */
@@ -140,6 +155,9 @@
             }
         }
         @media (min-width: 769px) {
+            .back-button {
+                display: inline-block; /* Show the back button on desktop */
+            }
             .container-wrapper .container, .container-wrapper .how-to-use {
                 height: 100%; /* Ensure both boxes are the same height on desktop */
             }
@@ -147,6 +165,7 @@
     </style>
 </head>
 <body>
+    <a href="https://bookiebasher123.github.io/btb/calcs.html" class="back-button">←</a>
     <div class="calculator-title">
         Betfair (Back/Lay)
     </div>
@@ -189,7 +208,6 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Nulla facilisi. Praesent at dui ut eros suscipit dictum. Integer sit amet venenatis est.</p>
         </div>
     </div>
-
     <script>
         // Function to calculate and display result for Back/Lay Calculator
         function calculate() {
@@ -199,7 +217,7 @@
             var layOdds = parseFloat(document.getElementById('layOdds').value);
             var commissionRate = parseFloat(document.getElementById('commissionRate').value);
             var profit;
-
+    
             if (document.getElementById('stake').value === "" ||
                 document.getElementById('backOdds').value === "" ||
                 document.getElementById('layOdds').value === "" ||
@@ -214,12 +232,12 @@
                     laystake = (stake * backOdds) / (layOdds - commissionRate / 100);
                     profit = laystake * (1 - commissionRate / 100) - stake;
                 }
-
+    
                 var resultElement = document.getElementById('result');
                 var textColor = 'white';
                 resultElement.style.color = textColor;
                 resultElement.style.fontWeight = 'normal'; // Not bold for non-profit text
-
+    
                 if (betType === "Cash Bet") {
                     if (profit >= 0) {
                         word1 = "profit";
@@ -235,9 +253,10 @@
                     resultElement.innerHTML = "Lay $" + (profit / (1 - commissionRate / 100)).toFixed(2) + " to ensure a conversion of <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>$" + profit.toFixed(2) + "</span> (a " + ((profit / stake) * 100).toFixed(2) + "% conversion). The liability of this lay bet will be $" + ((profit / (1 - commissionRate / 100)) * (layOdds - 1)).toFixed(2);
                 }
             }
-
+    
             document.getElementById('result').style.display = 'block'; // Show result box
         }
     </script>
 </body>
 </html>
+    
