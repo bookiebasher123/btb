@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expected Value (EV) Calculator</title>
+    <style>
+        @font-face {
+            font-family: 'Open Sauce';
+            src: url('fonts/OpenSauce-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Open Sauce';
+            src: url('fonts/OpenSauce-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1b1b1b;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2e2e2e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: none;
+        }
+        .calculator-title {
+            text-align: center;
+            font-size: 48px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .container-wrapper {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .container, .how-to-use-standard, .how-to-use-independent {
+            width: 333px;
+            padding: 20px;
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .box {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .label {
+            width: 120px;
+            font-weight: bold;
+        }
+        .dropdown, .input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-size: 16px;
+            background-color: #444;
+            color: #ffffff;
+            width: calc(100% - 140px);
+        }
+        .dropdown-label {
+            width: 150px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 10px;
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444;
+            color: #ffffff;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        .input.stake {
+            background-color: #3a6ff7;
+            color: #fff;
+        }
+        .input.back-odds, .input.true-odds {
+            background-color: #a079ec;
+            color: #fff;
+        }
+        .input.layOdds {
+            background-color: #d45c5c;
+            color: #fff;
+        }
+        .input.stake::placeholder,
+        .input.back-odds::placeholder,
+        .input.true-odds::placeholder,
+        .input.layOdds::placeholder {
+            color: #fff;
+        }
+        .input.odds::placeholder {
+            color: #fff;
+        }
+        .input.overround::placeholder {
+            color: #000;
+        }
+        .input[style*="background-color: #a079ec;"]::placeholder {
+            color: #fff;
+        }
+        .input[style*="background-color: #fdd835;"] {
+            color: #000;
+        }
+        .input[style*="background-color: #fdd835;"]::placeholder {
+            color: #000;
+        }
+        .input.odds {
+            background-color: #a079ec;
+            color: #fff;
+        }
+        .input.overround {
+            background-color: #fdd835;
+            color: #000;
+        }
+        .profit-text {
+            font-weight: bold;
+        }
+        .profit-text.green {
+            color: #4caf50;
+        }
+        .profit-text.red {
+            color: #f44336;
+        }
+        .how-to-use h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .how-to-use p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        @media (max-width: 768px) {
+            .container-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .how-to-use-standard, .how-to-use-independent {
+                margin-top: 20px;
+            }
+            .calculator-title {
+                margin-top: 20px;
+            }
+        }
+        @media (min-width: 769px) {
+            .back-button {
+                display: inline-block;
+            }
+            .container-wrapper {
+                flex-wrap: nowrap;
+            }
+            .how-to-use-standard, .how-to-use-independent {
+                margin-top: 0;
+            }
+        }
+        .button-buffer {
+            margin-left: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://bookiebasher123.github.io/btb/calcs.html" class="back-button">←</a>
+    <div class="calculator-title">
+        Expected Value (EV) Calculator
+    </div>
+    <div class="container-wrapper">
+        <!-- Expected Value (EV) Calculator -->
+        <div class="container">
+            <div class="section-header">
+                <h3>Expected Value (EV) Calculator</h3>
+            </div>
+            <div class="box">
+                <span class="label">Calculation Type:</span>
+                <select class="dropdown" id="calculationType" onchange="toggleEVFields()">
+                    <option value="Standard">Standard</option>
+                    <option value="Independent">At least X of N</option>
+                </select>
+            </div>
+            <div class="standard-ev-fields">
+                <div class="box">
+                    <span class="label">Stake($):</span>
+                    <input class="input stake" type="number" id="evStake" placeholder="Enter stake">
+                </div>
+                <div class="box">
+                    <span class="label">Back Odds:</span>
+                    <input class="input back-odds" type="number" id="evBackOdds" placeholder="Enter back odds">
+                </div>
+                <div class="box">
+                    <span class="label">True Odds:</span>
+                    <input class="input true-odds" type="number" id="evTrueOdds" placeholder="Enter true odds">
+                </div>
+                <div class="box">
+                    <span class="label">Assumed Overround (%):</span>
+                    <input class="input overround" type="text" id="evOverround" placeholder="Enter assumed overround" value="0">
+                </div>
+            </div>
+            <div class="independent-ev-fields" style="display: none;">
+                <div class="box">
+                    <span class="label">Combo Odds:</span>
+                    <input class="input stake" type="number" id="indComboOdds" placeholder="Enter combo odds">
+                </div>
+                <div class="box">
+                    <span class="label">X Value:</span>
+                    <input class="input stake" type="number" id="indAmountNeeded" placeholder="Enter X value">
+                </div>
+                <div class="box">
+                    <span class="label">Odds 1:</span>
+                    <input class="input odds" type="number" id="indOdds1" placeholder="Enter odds 1">
+                </div>
+                <div class="box">
+                    <span class="label">Odds 2:</span>
+                    <input class="input odds" type="number" id="indOdds2" placeholder="Enter odds 2">
+                </div>
+                <div id="indAdditionalOdds"></div>
+                <div class="box">
+                    <span class="label">Assumed Overround (%):</span>
+                    <input class="input overround" type="text" id="indOverround" placeholder="Enter assumed overround" value="0">
+                </div>
+                <div class="box button-container" id="buttonsBox">
+                    <button type="button" onclick="addIndOdds()">Add Another Option</button>
+                    <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
+                </div>
+            </div>
+            <button onclick="calculateEV()">Calculate EV</button>
+            <div class="result" id="resultEV"></div>
+        </div>
+        <!-- How to Use Sections -->
+        <div class="how-to-use-standard">
+            <h2>How to Use (Standard)</h2>
+            <p>This is the "How to Use" section for the standard EV calculation mode.</p>
+            <p>Enter your stake, back odds, true odds, and assumed overround percentage. Then click "Calculate EV" to get the expected value.</p>
+        </div>
+        <div class="how-to-use-independent" style="display: none;">
+            <h2>How to Use (At least X of N)</h2>
+            <p>This is the "How to Use" section for the "At least X of N" EV calculation mode.</p>
+            <p>Enter the combo odds, X value, individual odds for each option, and assumed overround percentage. Then click "Calculate EV" to get the expected value.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleEVFields() {
+            const calculationType = document.getElementById('calculationType').value;
+            const standardEVFields = document.querySelector('.standard-ev-fields');
+            const independentEVFields = document.querySelector('.independent-ev-fields');
+            const howToUseStandard = document.querySelector('.how-to-use-standard');
+            const howToUseIndependent = document.querySelector('.how-to-use-independent');
+
+            standardEVFields.style.display = 'none';
+            independentEVFields.style.display = 'none';
+            howToUseStandard.style.display = 'none';
+            howToUseIndependent.style.display = 'none';
+
+            if (calculationType === 'Standard') {
+                resetFields();
+                standardEVFields.style.display = 'block';
+                howToUseStandard.style.display = 'block';
+            } else if (calculationType === 'Independent') {
+                resetFields();
+                independentEVFields.style.display = 'block';
+                howToUseIndependent.style.display = 'block';
+            }
+        }
+
+        function resetFields() {
+            document.getElementById('evStake').value = '';
+            document.getElementById('evBackOdds').value = '';
+            document.getElementById('evTrueOdds').value = '';
+            document.getElementById('evOverround').value = '0';
+
+            document.getElementById('indComboOdds').value = '';
+            document.getElementById('indAmountNeeded').value = '';
+            document.getElementById('indOdds1').value = '';
+            document.getElementById('indOdds2').value = '';
+            document.getElementById('indOverround').value = '0';
+            document.getElementById('indAdditionalOdds').innerHTML = '';
+            indOddsCounter = 3;
+
+            document.getElementById('resultEV').innerHTML = '';
+            document.getElementById('resultEV').style.display = 'none';
+
+            document.getElementById('buttonsBox').innerHTML = `
+                <button type="button" onclick="addIndOdds()">Add Another Option</button>
+                <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
+            `;
+        }
+
+        let indOddsCounter = 3;
+
+        function addIndOdds() {
+            if (indOddsCounter > 5) {
+                alert("Only up to 5 options offered at the moment");
+                return;
+            }
+
+            const indAdditionalOdds = document.getElementById('indAdditionalOdds');
+            const newBox = document.createElement('div');
+            newBox.className = 'box';
+            newBox.innerHTML = `<span class="label">Odds ${indOddsCounter}:</span>
+                                <input class="input odds" type="number" id="indOdds${indOddsCounter}" placeholder="Enter odds ${indOddsCounter}" style="background-color: #a079ec; color: #fff;">`;
+            indAdditionalOdds.appendChild(newBox);
+            indOddsCounter++;
+
+            const buttonsBox = document.getElementById('buttonsBox');
+            buttonsBox.innerHTML = `
+                <button type="button" onclick="addIndOdds()">Add Another Option</button>
+                <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
+            `;
+        }
+
+        function removeIndOdds() {
+            if (indOddsCounter <= 3) {
+                alert("At least two options are required");
+                return;
+            }
+
+            indOddsCounter--;
+            const indAdditionalOdds = document.getElementById('indAdditionalOdds');
+            indAdditionalOdds.removeChild(indAdditionalOdds.lastChild);
+
+            if (indOddsCounter === 3) {
+                const buttonsBox = document.getElementById('buttonsBox');
+                buttonsBox.innerHTML = '<button type="button" onclick="addIndOdds()">Add Another Option</button>';
+            } else {
+                const buttonsBox = document.getElementById('buttonsBox');
+                buttonsBox.innerHTML = `
+                    <button type="button" onclick="addIndOdds()">Add Another Option</button>
+                    <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
+                `;
+            }
+        }
+
+        function calculateEV() {
+            const calculationType = document.getElementById('calculationType').value;
+            if (calculationType === 'Standard') {
+                calculateStandardEV();
+            } else if (calculationType === 'Independent') {
+                calculateIndependentEV();
+            }
+        }
+
+        function calculateStandardEV() {
+            var stake = parseFloat(document.getElementById('evStake').value);
+            var backOdds = parseFloat(document.getElementById('evBackOdds').value);
+            var trueOdds = parseFloat(document.getElementById('evTrueOdds').value);
+            var assumedOverround = parseFloat(document.getElementById('evOverround').value);
+            var ev;
+            var percentEV;
+
+            if (
+                document.getElementById('evStake').value === "" ||
+                document.getElementById('evBackOdds').value === "" ||
+                document.getElementById('evTrueOdds').value === "" ||
+                document.getElementById('evOverround').value === ""
+            ) {
+                document.getElementById('resultEV').innerHTML = "Finish entering all your bet details before calculating";
+            } else {
+                var profit = stake * (backOdds - 1);
+                var loss = -stake;
+                var winProbability = 1 / (trueOdds * (1 + assumedOverround / 100));
+                var lossProbability = 1 - winProbability;
+                ev = profit * winProbability + loss * lossProbability;
+                percentEV = (ev / stake) * 100;
+
+                var resultEVElement = document.getElementById('resultEV');
+                resultEVElement.style.color = '#ffffff';
+                resultEVElement.style.fontWeight = 'normal';
+
+                var prefix = ev >= 0 ? '$' : '-$';
+                var evAbs = Math.abs(ev);
+
+                document.getElementById('resultEV').innerHTML = "Expected Value (EV) is equal to <span class='profit-text " + (ev >= 0 ? 'green' : 'red') + "'>" + prefix + evAbs.toFixed(2) + "</span>, which represents a " + percentEV.toFixed(2) + "% return.";
+            }
+
+            document.getElementById('resultEV').style.display = 'block';
+        }
+
+        function calculateIndependentEV() {
+            const comboOdds = parseFloat(document.getElementById('indComboOdds').value);
+            const amountNeeded = parseFloat(document.getElementById('indAmountNeeded').value);
+            const assumedOverround = parseFloat(document.getElementById('indOverround').value);
+            const odds = [];
+            for (let I = 1; I < indOddsCounter; I++) {
+                odds.push(parseFloat(document.getElementById(`indOdds${I}`).value) * (1 + assumedOverround / 100));
+            }
+
+            if (odds.length < amountNeeded) {
+                document.getElementById('resultEV').innerHTML = "Error in your input, it is impossible to require " + amountNeeded + " out of " + odds.length + " outcomes to win.";
+                document.getElementById('resultEV').style.display = 'block';
+                return;
+            }
+
+            if (isNaN(comboOdds) || isNaN(amountNeeded) || isNaN(assumedOverround) || odds.some(isNaN)) {
+                document.getElementById('resultEV').innerHTML = "Finish entering all your bet details before calculating";
+                document.getElementById('resultEV').style.display = 'block';
+                return;
+            }
+
+            let totalProbability = 0;
+
+            for (let k = amountNeeded; k <= odds.length; k++) {
+                const combinations = getCombinations(odds.length, k);
+                combinations.forEach((comb) => {
+                    let combProbability = 1;
+                    comb.forEach((idx) => {
+                        combProbability *= (1 / odds[idx]);
+                    });
+                    for (let idx of Array(odds.length).keys()) {
+                        if (!comb.includes(idx)) {
+                            combProbability *= (1 - (1 / odds[idx]));
+                        }
+                    }
+                    totalProbability += combProbability;
+                });
+            }
+
+            const trueOdds = 1 / totalProbability;
+            const ev = ((comboOdds - trueOdds) / trueOdds) * 100;
+
+            document.getElementById('resultEV').innerHTML = "The expected value for at least " + amountNeeded + " out of " + odds.length + " independent events winning is <span class='profit-text " + (ev >= 0 ? 'green' : 'red') + "'>" + ev.toFixed(2) + "%</span>. True Odds: " + trueOdds.toFixed(2);
+            document.getElementById('resultEV').style.display = 'block';
+        }
+
+        function getCombinations(n, k) {
+            const result = [];
+            const comb = Array.from({ length: k }, (_, i) => i);
+
+            while (comb[k - 1] < n) {
+                result.push(comb.slice());
+
+                let t = k - 1;
+                while (t !== 0 && comb[t] === n - k + t) t--;
+
+                comb[t]++;
+                for (let I = t + 1; I < k; I++) comb[I] = comb[I - 1] + 1;
+            }
+
+            return result;
+        }
+    </script>
+</body>
+</html>
