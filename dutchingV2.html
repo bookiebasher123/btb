@@ -84,6 +84,10 @@
             background-color: #444; /* Input boxes background color */
             color: #ffffff;
         }
+        .dropdown {
+            width: 100%; /* Ensure dropdown matches the width of input boxes */
+            box-sizing: border-box;
+        }
         .dropdown-label {
             width: 150px;
             font-weight: bold;
@@ -147,6 +151,13 @@
             .container-wrapper {
                 flex-direction: column;
                 gap: 20px;
+            }
+            .container, .how-to-use {
+                width: 100%; /* Adjust the width for smaller screens */
+                max-width: 300px; /* Make the containers smaller */
+            }
+            .label {
+                width: 120px; /* Adjust label width for smaller screens */
             }
             .how-to-use {
                 margin-top: 20px; /* Add more space between the boxes on mobile */
