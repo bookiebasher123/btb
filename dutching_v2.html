@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betting Calculators</title>
+    <style>
+        @font-face {
+            font-family: 'Open Sauce';
+            src: url('fonts/OpenSauce-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Open Sauce';
+            src: url('fonts/OpenSauce-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1b1b1b;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2e2e2e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: none;
+        }
+        .calculator-title {
+            text-align: center;
+            font-size: 48px; /* Increased the size */
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .container-wrapper {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .container, .how-to-use {
+            width: 400px; /* Increased width to accommodate larger labels */
+            padding: 20px;
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .box {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .label {
+            width: 160px; /* Increased label width */
+            font-weight: bold;
+        }
+        .dropdown, .input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-size: 16px;
+            background-color: #444; /* Input boxes background color */
+            color: #ffffff;
+        }
+        .dropdown-label {
+            width: 150px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 10px;
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444; /* Result box background color */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        .input.stake, .input.outcome1, .input.outcome2 {
+            background-color: #5a5a5a; /* Input boxes specific background color */
+            color: #fff;
+        }
+        .input.odds {
+            background-color: #3a3a3a; /* Different gray for Odds */
+            color: #fff;
+        }
+        .input.stake::placeholder,
+        .input.outcome1::placeholder,
+        .input.outcome2::placeholder,
+        .input.odds::placeholder {
+            color: #b1b1b1; /* Darker placeholder text color */
+        }
+        .profit-text {
+            font-weight: bold;
+        }
+        .profit-text.green {
+            color: #4caf50;
+        }
+        .profit-text.red {
+            color: #f44336;
+        }
+        .how-to-use h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .how-to-use p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        @media (max-width: 768px) {
+            .container-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .how-to-use {
+                margin-top: 20px; /* Add more space between the boxes on mobile */
+            }
+            .calculator-title {
+                margin-top: 20px; /* Add margin to the top of the heading on mobile */
+            }
+        }
+        @media (min-width: 769px) {
+            .back-button {
+                display: inline-block; /* Show the back button on desktop */
+            }
+            .container-wrapper .container, .container-wrapper .how-to-use {
+                height: 100%; /* Ensure both boxes are the same height on desktop */
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://bookiebasher123.github.io/btb/calcs.html" class="back-button">←</a>
+    <div class="calculator-title">
+        Dutching Calculator
+    </div>
+    <div class="container-wrapper">
+        <!-- Dutching Calculator -->
+        <div class="container">
+            <div class="section-header">
+                <h3>Dutching Calculator</h3>
+            </div>
+            <div class="box">
+                <span class="label">Bet Type:</span>
+                <select class="dropdown" id="dutchBetType">
+                    <option value="SNR Bonus Bet">SNR Bonus Bet</option>
+                    <option value="SR Bonus Bet">SR Bonus Bet</option>
+                    <option value="Cash Bet">Cash Bet</option>
+                </select>
+            </div>
+            <div class="box">
+                <span class="label">Outcome 1 Name:</span>
+                <input class="input outcome1" type="text" id="outcome1Name" value="Team A">
+            </div>
+            <div class="box">
+                <span class="label">Outcome 2 Name:</span>
+                <input class="input outcome2" type="text" id="outcome2Name" value="Team B">
+            </div>
+            <div class="box">
+                <span class="label">Outcome 1 Stake ($):</span>
+                <input class="input stake" type="number" id="outcome1Stake" placeholder="Enter Outcome 1 stake">
+            </div>
+            <div class="box">
+                <span class="label">Outcome 1 Odds:</span>
+                <input class="input odds" type="number" id="outcome1Odds" placeholder="Enter Outcome 1 odds">
+            </div>
+            <div class="box">
+                <span class="label">Outcome 2 Odds:</span>
+                <input class="input odds" type="number" id="outcome2Odds" placeholder="Enter Outcome 2 odds">
+            </div>
+            <button onclick="calculateTeam()">Calculate</button>
+            <div class="result" id="resultTeam"></div>
+        </div>
+
+        <!-- How to Use Box -->
+        <div class="how-to-use">
+            <h2>How to Use</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Nulla facilisi. Praesent at dui ut eros suscipit dictum. Integer sit amet venenatis est.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Nulla facilisi. Praesent at dui ut eros suscipit dictum. Integer sit amet venenatis est.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Nulla facilisi. Praesent at dui ut eros suscipit dictum. Integer sit amet venenatis est.</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to calculate and display result for Dutching Calculator
+        function calculateTeam() {
+            var dutchBetType = document.getElementById('dutchBetType').value;
+            var outcome1Name = document.getElementById('outcome1Name').value;
+            var outcome1Odds = parseFloat(document.getElementById('outcome1Odds').value);
+            var outcome1Stake = parseFloat(document.getElementById('outcome1Stake').value);
+            var outcome2Name = document.getElementById('outcome2Name').value;
+            var outcome2Odds = parseFloat(document.getElementById('outcome2Odds').value);
+            var profit;
+
+            if (
+                document.getElementById('outcome1Name').value === "" ||
+                document.getElementById('outcome1Odds').value === "" ||
+                document.getElementById('outcome1Stake').value === "" ||
+                document.getElementById('outcome2Name').value === "" ||
+                document.getElementById('outcome2Odds').value === ""
+            ) {
+                document.getElementById('resultTeam').innerHTML = "Finish entering all your bet details before calculating";
+            } else {
+                if (dutchBetType === "SNR Bonus Bet") {
+                    outcome2Stake = (outcome1Stake * (outcome1Odds - 1)) / outcome2Odds;
+                    profit = (outcome1Stake * (outcome1Odds - 1)) - outcome2Stake;
+                } else if (dutchBetType === "SR Bonus Bet") {
+                    outcome2Stake = (outcome1Stake * (outcome1Odds)) / outcome2Odds;
+                    profit = (outcome1Stake * (outcome1Odds)) - outcome2Stake;
+                } else if (dutchBetType === "Cash Bet") {
+                    outcome2Stake = (outcome1Stake * (outcome1Odds)) / outcome2Odds;
+                    profit = (outcome1Stake * (outcome1Odds)) - outcome2Stake - outcome1Stake;
+                }
+
+                var resultTeamElement = document.getElementById('resultTeam');
+                var textColor = 'white';
+                var profitColor = (profit >= 0) ? '#4caf50' : '#f44336';
+                resultTeamElement.style.color = textColor;
+                resultTeamElement.style.fontWeight = 'normal'; // Not bold for non-profit text
+
+                if (dutchBetType === "Cash Bet") {
+                    if (profit >= 0) {
+                        word1 = "profit";
+                        prefix = "";
+                        aprofit = profit;
+                    } else {
+                        word1 = "loss";
+                        prefix = "-";
+                        aprofit = -profit;
+                    }
+                    resultTeamElement.innerHTML = "Place $" + outcome2Stake.toFixed(2) + " on " + outcome2Name + " to lock-in a <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>" + word1 + " of " + prefix + "$" + aprofit.toFixed(2) + "</span> (" + ((profit / (outcome1Stake + outcome2Stake)) * 100).toFixed(2) + "%)";
+                } else {
+                    resultTeamElement.innerHTML = "Place $" + outcome2Stake.toFixed(2) + " on " + outcome2Name + " to ensure a conversion of <span class='profit-text " + (profit >= 0 ? 'green' : 'red') + "'>$" + profit.toFixed(2) + "</span> (a " + ((profit / outcome1Stake) * 100).toFixed(2) + "% conversion)";
+                }
+            }
+
+            document.getElementById('resultTeam').style.display = 'block'; // Show result box
+        }
+    </script>
+</body>
+</html>
