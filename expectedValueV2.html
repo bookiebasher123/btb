@@ -265,7 +265,6 @@
                 </div>
                 <div class="box button-container" id="buttonsBox">
                     <button type="button" onclick="addIndOdds()">Add Another Option</button>
-                    <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
                 </div>
             </div>
             <button onclick="calculateEV()">Calculate EV</button>
@@ -327,15 +326,14 @@
 
             document.getElementById('buttonsBox').innerHTML = `
                 <button type="button" onclick="addIndOdds()">Add Another Option</button>
-                <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
             `;
         }
 
         let indOddsCounter = 3;
 
         function addIndOdds() {
-            if (indOddsCounter > 5) {
-                alert("Only up to 5 options offered at the moment");
+            if (indOddsCounter > 8) {
+                alert("Only up to 8 options offered at the moment");
                 return;
             }
 
@@ -347,11 +345,11 @@
             indAdditionalOdds.appendChild(newBox);
             indOddsCounter++;
 
-            const buttonsBox = document.getElementById('buttonsBox');
-            buttonsBox.innerHTML = `
-                <button type="button" onclick="addIndOdds()">Add Another Option</button>
-                <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
-            `;
+            let buttonsHTML = `<button type="button" onclick="addIndOdds()">Add Another Option</button>`;
+            if (indOddsCounter > 3) {
+                buttonsHTML += `<button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>`;
+            }
+            document.getElementById('buttonsBox').innerHTML = buttonsHTML;
         }
 
         function removeIndOdds() {
@@ -364,16 +362,11 @@
             const indAdditionalOdds = document.getElementById('indAdditionalOdds');
             indAdditionalOdds.removeChild(indAdditionalOdds.lastChild);
 
-            if (indOddsCounter === 3) {
-                const buttonsBox = document.getElementById('buttonsBox');
-                buttonsBox.innerHTML = '<button type="button" onclick="addIndOdds()">Add Another Option</button>';
-            } else {
-                const buttonsBox = document.getElementById('buttonsBox');
-                buttonsBox.innerHTML = `
-                    <button type="button" onclick="addIndOdds()">Add Another Option</button>
-                    <button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>
-                `;
+            let buttonsHTML = `<button type="button" onclick="addIndOdds()">Add Another Option</button>`;
+            if (indOddsCounter > 3) {
+                buttonsHTML += `<button class="button-buffer" type="button" onclick="removeIndOdds()">Remove Last Option</button>`;
             }
+            document.getElementById('buttonsBox').innerHTML = buttonsHTML;
         }
 
         function calculateEV() {
@@ -469,18 +462,16 @@
 
         function getCombinations(n, k) {
             const result = [];
-            const comb = Array.from({ length: k }, (_, i) => i);
-
-            while (comb[k - 1] < n) {
-                result.push(comb.slice());
-
-                let t = k - 1;
-                while (t !== 0 && comb[t] === n - k + t) t--;
-
-                comb[t]++;
-                for (let I = t + 1; I < k; I++) comb[I] = comb[I - 1] + 1;
+            function combine(start, choose, prefix) {
+                if (choose === 0) {
+                    result.push(prefix);
+                    return;
+                }
+                for (let i = start; i <= n - choose; i++) {
+                    combine(i + 1, choose - 1, prefix.concat(i));
+                }
             }
-
+            combine(0, k, []);
             return result;
         }
     </script>
