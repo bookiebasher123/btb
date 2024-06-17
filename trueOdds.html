@@ -118,8 +118,8 @@
             background-color: #444444;
             color: #fff;
         }
-        .input[style*="background-color: #444444;"]::placeholder {
-            color: #fff;
+        .input::placeholder {
+            color: #999;
         }
         .input.odds {
             background-color: #a079ec;
@@ -197,7 +197,7 @@
                 <h3>True Odds Calculator</h3>
             </div>
             <div class="box">
-                <span class="label">Calculation Type:</span>
+                <span class="label">Calculation Method:</span>
                 <select class="dropdown" id="calculationType" onchange="toggleTrueOddsFields()">
                     <option value="AllOutcomes">All Outcomes</option>
                     <option value="Overround">Overround</option>
@@ -232,14 +232,29 @@
         </div>
         <!-- How to Use Sections -->
         <div class="how-to-use-all-outcomes">
-            <h2>How to Use (All Outcomes)</h2>
-            <p>This is the "How to Use" section for the All Outcomes calculation mode.</p>
-            <p>Enter the odds for each outcome. You can add up to 8 outcomes. Then click "Calculate True Odds" to get the true odds and overround for the market.</p>
+            <h2>How to Use</h2>
+            <p>1. <strong>Calculation Method:</strong> Select the method you want to use to calculate true odds.</p>
+            <ul>
+                <li><strong>All Outcomes:</strong> This method calculates true odds using all the odds provided for ALL outcomes in an event. Without entering all outcomes, the value will be incorrect. You can add up to 8 outcomes.</li>
+                <li><strong>Overround:</strong> This method is simpler and converts base odds to true odds using a provided overround percentage.</li>
+            </ul>
+            <p>2. <strong>Outcome 1:</strong> Enter the odds for all the outcomes in an event and then calculate!</p>
+        
+            <p>You can add up to 8 different outcomes using the "Add Another Outcome" button. For Head-to-Head (H2H) markets, there are typically 2 or 3 outcomes (3 when there is a draw). For events such as horse races, there can be more than 3 outcomes.</p>
+        
+            <p><strong>How it works:</strong> This calculator sums all the implied probabilities of each set of odds. It then checks how much less or more than 100% has been accounted for to determine the true odds. Understanding the true odds value is useful for Expected Value (EV) calculations as it provides a more accurate assessment of the potential profitability of a bet.</p>
         </div>
         <div class="how-to-use-overround" style="display: none;">
-            <h2>How to Use (Overround)</h2>
-            <p>This is the "How to Use" section for the Overround calculation mode.</p>
-            <p>Enter the base odds and overround percentage. Then click "Calculate True Odds" to get the adjusted odds.</p>
+            <h2>How to Use</h2>
+            <p>1. <strong>Calculation Method:</strong> Select the method you want to use to calculate true odds.</p>
+            <ul>
+                <li><strong>All Outcomes:</strong> This method calculates true odds using all the odds provided for ALL outcomes in an event. Without entering all outcomes, the value will be incorrect. You can add up to 8 outcomes.</li>
+                <li><strong>Overround:</strong> This method is simpler and converts base odds to true odds using a provided overround percentage.</li>
+            </ul>
+            <p>2. <strong>Base Odds:</strong> Enter the odds for an event before any house edge or overround is accounted for.</p>
+            <p>3. <strong>Overround:</strong> Enter the known or assumed overround of the bet.</p>
+        
+            <p><strong>Assumed overround:</strong> H2H markets typically have an overround between 4.00% and 8.00%, whereas player props and racing usually have much higher overrounds.</p>
         </div>
     </div>
 
@@ -297,6 +312,19 @@
             newBox.innerHTML = `<span class="label">Outcome ${outcomeCounter}:</span>
                                 <input class="input outcome" type="number" step="0.01" id="outcome${outcomeCounter}" placeholder="Enter odds for Outcome ${outcomeCounter}" style="background-color: #444444; color: #fff;" onblur="formatDecimal(this)">`;
             additionalOutcomes.appendChild(newBox);
+
+            // Apply placeholder color styling to the newly added input
+            const newInput = newBox.querySelector('input');
+            newInput.style.setProperty('--placeholder-color', '#999'); // Set the desired placeholder color
+
+            const style = document.createElement('style');
+            style.innerHTML = `
+                #${newInput.id}::placeholder {
+                    color: var(--placeholder-color);
+                }
+            `;
+            document.head.appendChild(style);
+
             outcomeCounter++;
 
             let buttonsHTML = `<button type="button" onclick="addOutcome()">Add Another Outcome</button>`;
