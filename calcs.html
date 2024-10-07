@@ -42,18 +42,18 @@
             margin-right: 50px;
         }
         .logo img {
-            width: 300px; /* Adjust the size as needed */
+            width: 300px;
             height: auto;
         }
         .content {
-            text-align: center; /* Center-align text */
+            text-align: center;
         }
         .button-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-top: 20px;
-            justify-items: center; /* Center-align buttons */
+            justify-items: center;
         }
         .button {
             background-color: #333;
@@ -65,14 +65,18 @@
             text-align: center;
             font-size: 16px;
             cursor: pointer;
-            width: 220px; /* Set the width to be the same for all buttons */
-            box-sizing: border-box; /* Ensure padding does not affect width */
+            width: 220px;
+            box-sizing: border-box;
         }
         .button:hover {
             background-color: #555;
         }
+        .kelly-button {
+            grid-column: span 2;
+            width: 460px; /* Double the width of regular buttons on desktop */
+        }
         h1 {
-            margin-bottom: 10px; /* Add some space between the heading and buttons */
+            margin-bottom: 10px;
         }
         @media (max-width: 768px) {
             .container-desktop {
@@ -86,15 +90,18 @@
                 text-align: center;
             }
             .logo-mobile img {
-                width: 250px; /* Adjust the size as needed */
+                width: 250px;
                 height: auto;
             }
             .button-container-mobile {
-                display: grid;
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Align buttons in the center */
                 gap: 10px;
                 margin-top: 20px;
-                justify-items: center; /* Center-align buttons */
+            }
+            .button-container-mobile .button {
+                width: 220px; /* Ensure all buttons are the same size on mobile */
             }
         }
     </style>
@@ -111,6 +118,7 @@
                 <a href="https://bookiebasher123.github.io/btb/dutchingV2.html" class="button">Dutching</a>
                 <a href="https://bookiebasher123.github.io/btb/expectedValueV2.html" class="button">Expected Value</a>
                 <a href="https://bookiebasher123.github.io/btb/trueOdds.html" class="button">True Odds</a>
+                <a href="https://bookiebasher123.github.io/btb/kelly.html" class="button kelly-button">Kelly Criterion Calc</a>
             </div>
         </div>
     </div>
@@ -126,6 +134,7 @@
                 <a href="https://bookiebasher123.github.io/btb/dutchingV2.html" class="button">Dutching</a>
                 <a href="https://bookiebasher123.github.io/btb/expectedValueV2.html" class="button">Expected Value</a>
                 <a href="https://bookiebasher123.github.io/btb/trueOdds.html" class="button">True Odds</a>
+                <a href="https://bookiebasher123.github.io/btb/kelly.html" class="button">Kelly Criterion Calc</a>
             </div>
         </div>
     </div>
